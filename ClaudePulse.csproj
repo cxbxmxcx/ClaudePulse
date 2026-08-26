@@ -9,7 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>ClaudePulse</AssemblyName>
     <RootNamespace>ClaudePulse</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <SelfContained>false</SelfContained>
   </PropertyGroup>
 
