@@ -15,6 +15,7 @@ An always-on-top Windows tray widget that monitors your live [Claude Code](https
 - **Click-to-focus** — click a session card and the hosting terminal window (Windows Terminal, VS Code, …) comes to the front, found by walking the parent-process chain.
 - **Reboot recovery** — continuously records live CLI sessions; after a restart, one click (**↻ Restore**) reopens each one in a Windows Terminal tab via `claude --resume`, in its original folder.
 - **Saved session sets** — 💾 remembers your current working arrangement; ▶ relaunches it any time, skipping sessions already running.
+- **Hide dormant sessions** — the 💤 header toggle filters out sessions with no activity for 30+ minutes (typically desktop-app leftovers); the footer still counts them, and the choice persists.
 - **Quality of life** — `Ctrl+Alt+C` global toggle, single-instance, drag anywhere and the position persists, pin/unpin auto-hide.
 
 ## Build & run
