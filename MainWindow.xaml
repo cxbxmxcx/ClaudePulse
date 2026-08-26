@@ -31,6 +31,11 @@
                             Margin="0,0,6,0" Cursor="Hand" BorderThickness="0"
                             ToolTip="Reopen sessions that were running before shutdown — one Windows Terminal tab each, resuming the same conversation"
                             Background="#FF2E4A3A" Foreground="{StaticResource AccentIdle}"/>
+                    <ToggleButton x:Name="HideDormantButton" Content="&#x1F4A4;" FontSize="12"
+                                  Width="26" Height="24" Margin="0,0,4,0"
+                                  ToolTip="Hide dormant sessions (no activity for 30+ minutes)"
+                                  Background="Transparent" BorderThickness="0"
+                                  Foreground="{StaticResource TextSecondary}" Cursor="Hand"/>
                     <ToggleButton x:Name="PinButton" Content="&#x1F4CC;" FontSize="12"
                                   Width="26" Height="24" Margin="0,0,4,0" IsChecked="True"
                                   ToolTip="Pinned: panel stays open. Unpin to auto-hide when it loses focus."

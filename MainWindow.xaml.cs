@@ -38,6 +38,8 @@ public partial class MainWindow : Window
         LoadSettings();
         PinButton.Checked += (_, _) => SaveSettings();
         PinButton.Unchecked += (_, _) => SaveSettings();
+        HideDormantButton.Checked += (_, _) => { SaveSettings(); _ = RefreshAsync(); };
+        HideDormantButton.Unchecked += (_, _) => { SaveSettings(); _ = RefreshAsync(); };
 
         // Sessions recorded as alive last time ClaudePulse ran; anything still
         // dead after the first poll is offered for one-click restore.
@@ -120,16 +122,21 @@ public partial class MainWindow : Window
         {
             var snapshot = await Task.Run(_monitor.Snapshot);
             _lastSnapshot = snapshot;
-            Reconcile(snapshot);
+            bool hideDormant = HideDormantButton.IsChecked == true;
+            var display = hideDormant ? snapshot.Where(s => !s.IsDormant).ToList() : snapshot;
+            Reconcile(display);
             int busy = snapshot.Count(s => s.IsBusy);
             int dormant = snapshot.Count(s => s.IsDormant);
             if (DateTime.UtcNow > _footerOverrideUntil)
                 FooterText.Text = snapshot.Count == 0
                     ? "Ctrl+Alt+C toggles this panel"
                     : $"{snapshot.Count} session{(snapshot.Count == 1 ? "" : "s")} · {busy} busy"
-                      + (dormant > 0 ? $" · {dormant} dormant" : "")
+                      + (dormant > 0 ? $" · {dormant} dormant{(hideDormant ? " (hidden)" : "")}" : "")
                       + " · click a card to focus it";
-            EmptyText.Visibility = snapshot.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            EmptyText.Text = snapshot.Count == 0
+                ? "No active Claude Code sessions"
+                : $"{dormant} dormant session{(dormant == 1 ? "" : "s")} hidden";
+            EmptyText.Visibility = display.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             SessionsRefreshed?.Invoke(snapshot.Count, busy);
 
             // Anything from the previous run that is alive again needs no restore.
@@ -280,6 +287,7 @@ public partial class MainWindow : Window
                 left = Left,
                 top = Top,
                 pinned = PinButton.IsChecked == true,
+                hideDormant = HideDormantButton.IsChecked == true,
             }));
         }
         catch (Exception) { /* best-effort persistence */ }
@@ -296,6 +304,8 @@ public partial class MainWindow : Window
             double top = r.GetProperty("top").GetDouble();
             if (r.TryGetProperty("pinned", out var pin))
                 PinButton.IsChecked = pin.GetBoolean();
+            if (r.TryGetProperty("hideDormant", out var hd))
+                HideDormantButton.IsChecked = hd.GetBoolean();
 
             // Only restore a position that is still on a connected screen.
             var virt = new Rect(SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop,
