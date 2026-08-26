@@ -4,6 +4,8 @@ An always-on-top Windows tray widget that monitors your live [Claude Code](https
 
 ![.NET 9](https://img.shields.io/badge/.NET-9.0-blue) ![Windows](https://img.shields.io/badge/platform-Windows-lightgrey)
 
+<p align="center"><img src="docs/screenshot.png" width="480" alt="ClaudePulse panel showing four live sessions with status dots, git branches, and token usage bars"></p>
+
 ## Features
 
 - **Live session list** — every running Claude Code process (CLI and desktop app), polled every 2 seconds from the registry Claude Code maintains in `~/.claude/sessions/`.
